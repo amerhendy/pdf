@@ -1831,7 +1831,7 @@ class TCPDF {
 		$this->gradients = array();
 		$this->InFooter = false;
 		$this->lasth = 0;
-		$this->FontFamily = config('Amer.tcpdf.Font.Main.name')?config('Amer.tcpdf.Font.Main.name'):'helvetica';
+		$this->FontFamily = config('Amer.TCPDF.Font.Main.name')?config('Amer.TCPDF.Font.Main.name'):'helvetica';
 		$this->FontStyle = '';
 		$this->FontSizePt = 12;
 		$this->underline = false;
@@ -1945,7 +1945,7 @@ class TCPDF {
 		$this->custom_xmp_rdf = '';
 	}
 	private function setDefaults(){
-	$this->cell_height_ratio = config('Amer.tcpdf.CellHeightRation');
+	$this->cell_height_ratio = config('Amer.TCPDF.CellHeightRation');
 	}
 	/**
 	 * Default destructor.
@@ -2300,7 +2300,7 @@ class TCPDF {
 		 * @public
 		 * @since 2.0.000 (2008-01-03)
 	 */
-	public function setRTL($enable, $resetx=true) 
+	public function setRTL($enable, $resetx=true)
 	{
 		$enable = $enable ? true : false;
 		$resetx = ($resetx AND ($enable != $this->rtl));
@@ -2920,7 +2920,7 @@ class TCPDF {
 	public function Error($msg) {
 		// unset all class variables
 		$this->_destroy(true);
-		if (defined(config('Amer.tcpdf.TrowExeptionError')) AND !config('Amer.tcpdf.TrowExeptionError')) {
+		if (defined(config('Amer.TCPDF.TrowExeptionError')) AND !config('Amer.TCPDF.TrowExeptionError')) {
 			die('<strong>TCPDF ERROR: </strong>'.$msg);
 		} else {
 			throw new \Exception('TCPDF ERROR: '.$msg);
@@ -3400,7 +3400,7 @@ class TCPDF {
 			} else {
 				$this->x = $this->original_lMargin;
 			}
-			if (($headerdata['logo']) AND ($headerdata['logo'] != config("Amer.tcpdf.BlankImage"))) {
+			if (($headerdata['logo']) AND ($headerdata['logo'] != config("Amer.TCPDF.BlankImage"))) {
 				$imgtype = TCPDF_IMAGES::getImageFileType($headerdata['logo']);
 				if (($imgtype == 'eps') OR ($imgtype == 'ai')) {
 					$this->ImageEps($headerdata['logo'], '', '', $headerdata['logo_width']);
@@ -3413,7 +3413,7 @@ class TCPDF {
 			} else {
 				$imgy = $this->y;
 			}
-			
+
 			$cell_height = $this->getCellHeight($headerfont[2] / $this->k);
 			// set starting margin for text data cell
 			if ($this->getRTL()) {
@@ -5259,7 +5259,7 @@ class TCPDF {
 					$unicode = TCPDF_FONTS::UTF8StringToArray($txt, $this->isunicode, $this->CurrentFont); // array of UTF-8 unicode values
 					$unicode = TCPDF_FONTS::utf8Bidi($unicode, '', $this->tmprtl, $this->isunicode, $this->CurrentFont);
 					// replace thai chars (if any)
-					if (defined(config('Amer.tcpdf.ThaiTopchars')) AND (config('Amer.tcpdf.ThaiTopchars') == true)) {
+					if (defined(config('Amer.TCPDF.ThaiTopchars')) AND (config('Amer.TCPDF.ThaiTopchars') == true)) {
 						// number of chars
 						$numchars = count($unicode);
 						// po pla, for far, for fan
@@ -6872,11 +6872,11 @@ class TCPDF {
 		// check if we are passing an image as file or string
 		if ($file[0] === '@') {
 			// image from string
-			$imgdata = substr($file, 1);
+			$imgdata = \Str::substr($file, 1);
 		} else { // image file
 			if ($file[0] === '*') {
 				// image as external stream
-				$file = substr($file, 1);
+				$imgdata = \Str::substr($file, 1);
 				$exurl = $file;
 			}
 			// check if file exist and it is valid
@@ -7016,9 +7016,9 @@ class TCPDF {
 			}
 		} elseif (($ismask === false) AND ($imgmask === false) AND (strpos($file, '__tcpdf_'.$this->file_id.'_imgmask_') === FALSE)) {
 			// create temp image file (without alpha channel)
-			$tempfile_plain = config("Amer.tcpdf.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_plain_'.$filehash;
+			$tempfile_plain = config("Amer.TCPDF.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_plain_'.$filehash;
 			// create temp alpha file
-			$tempfile_alpha = config("Amer.tcpdf.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_alpha_'.$filehash;
+			$tempfile_alpha = config("Amer.TCPDF.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_alpha_'.$filehash;
 			// check for cached images
 			if (in_array($tempfile_plain, $this->imagekeys)) {
 				// get existing image data
@@ -7259,9 +7259,9 @@ class TCPDF {
 			$filehash = md5($file);
 		}
 		// create temp image file (without alpha channel)
-		$tempfile_plain = config("Amer.tcpdf.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_plain_'.$filehash;
+		$tempfile_plain = config("Amer.TCPDF.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_plain_'.$filehash;
 		// create temp alpha file
-		$tempfile_alpha = config("Amer.tcpdf.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_alpha_'.$filehash;
+		$tempfile_alpha = config("Amer.TCPDF.cachePath").'__tcpdf_'.$this->file_id.'_imgmask_alpha_'.$filehash;
 		$parsed = false;
 		$parse_error = '';
 		// ImageMagick extension
@@ -7768,18 +7768,19 @@ class TCPDF {
 		if ($destroyall AND !$preserve_objcopy && isset($this->file_id)) {
 			self::$cleaned_ids[$this->file_id] = true;
 			// remove all temporary files
-			if ($handle = @opendir(config("Amer.tcpdf.cachePath"))) {
+			if ($handle = @opendir(config("Amer.TCPDF.cachePath"))) {
 				while ( false !== ( $file_name = readdir( $handle ) ) ) {
 					if (strpos($file_name, '__tcpdf_'.$this->file_id.'_') === 0) {
-						unlink(config("Amer.tcpdf.cachePath").$file_name);
+						unlink(config("Amer.TCPDF.cachePath").$file_name);
 					}
 				}
 				closedir($handle);
 			}
 			if (isset($this->imagekeys)) {
 				foreach($this->imagekeys as $file) {
-					if (strpos($file, config("Amer.tcpdf.cachePath")) === 0 && TCPDF_STATIC::file_exists($file)) {
-						@unlink($file);
+					if (strpos($file, config("Amer.TCPDF.cachePath")) === 0 && TCPDF_STATIC::file_exists($file)) {
+
+						//@unlink($file);
 					}
 				}
 			}
@@ -9703,7 +9704,7 @@ class TCPDF {
 		// if required, add standard sRGB ICC colour profile
 		if ($this->pdfa_mode OR $this->force_srgb) {
 			$iccobj = $this->_newobj();
-			$icc = file_get_contents(config('Amer.tcpdf.packagePath').'/includes/sRGB.icc');
+			$icc = file_get_contents(config('Amer.TCPDF.packagePath').'/includes/sRGB.icc');
 			$filter = '';
 			if ($this->compress) {
 				$filter = ' /Filter /FlateDecode';
@@ -13191,7 +13192,7 @@ class TCPDF {
 			$this->javascript .= 'f'.$name.".print=false;\n";
 			return;
 		}
-		
+
 		// get default style
 		$prop = array_merge($this->getFormDefaultProp(), $prop);
 		$prop['Pushbutton'] = 'true';
@@ -15536,7 +15537,7 @@ class TCPDF {
 			}
 			case 'N':{
 				$this->setY($this->img_rb_y);
-				
+
 				break;
 			}
 			default:{
@@ -16367,7 +16368,7 @@ class TCPDF {
 		// define self-closing tags
 		$selfclosingtags = array('area','base','basefont','br','hr','input','img','link','meta');
 		// remove all unsupported tags (the line below lists all supported tags)
-		
+
 		$html = strip_tags($html, '<marker/><a><b><blockquote><body><br><br/><dd><del><div><dl><dt><em><font><form><h1><h2><h3><h4><h5><h6><hr><hr/><i><img><input><label><li><ol><option><p><pre><s><select><small><span><strike><strong><sub><sup><table><tablehead><tcpdf><td><textarea><th><thead><tr><tt><u><ul>');
 		//replace some blank characters
 		$html = preg_replace('/<pre/', '<xre', $html); // preserve pre tag
@@ -16402,6 +16403,7 @@ class TCPDF {
 			$html = $html_a.$html_b.substr($html, $pos + 11);
 			$offset = strlen($html_a.$html_b);
 		}
+
 		$html = preg_replace('/([\s]*)<option/si', '<option', $html);
 		$html = preg_replace('/<\/option>([\s]*)/si', '</option>', $html);
 		$offset = 0;
@@ -16442,7 +16444,7 @@ class TCPDF {
 		$html = preg_replace('/<su([bp])/', '<zws/><su\\1', $html); // fix sub/sup alignment
 		$html = preg_replace('/<\/su([bp])>/', '</su\\1><zws/>', $html); // fix sub/sup alignment
 		$html = preg_replace('/'.$this->re_space['p'].'+/'.$this->re_space['m'], chr(32), $html); // replace multiple spaces with a single space
-		
+
 		// trim string
 		$html = $this->stringTrim($html);
 		// fix br tag after li
@@ -16948,7 +16950,7 @@ class TCPDF {
 					}
 					if (($dom[$key]['value'] == 'small') OR ($dom[$key]['value'] == 'sup') OR ($dom[$key]['value'] == 'sub')) {
 						if (!isset($dom[$key]['attribute']['size']) AND !isset($dom[$key]['style']['font-size'])) {
-							$dom[$key]['fontsize'] = $dom[$key]['fontsize'] * config('Amer.tcpdf.SmallRetio');
+							$dom[$key]['fontsize'] = $dom[$key]['fontsize'] * config('Amer.TCPDF.SmallRetio');
 						}
 					}
 					if (($dom[$key]['value'] == 'strong') OR ($dom[$key]['value'] == 'b')) {
@@ -17287,7 +17289,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 			$this->resetLastH();
 		}
 		$dom = $this->getHtmlDomArray($html);
-		
+
 		$maxel = count($dom);
 		$key = 0;
 		while ($key < $maxel) {
@@ -17371,7 +17373,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 					$this_method_vars['dom'] = $dom;
 				}
 			}
-			
+
 			// print THEAD block
 			if (($dom[$key]['value'] == 'tr') AND isset($dom[$key]['thead']) AND $dom[$key]['thead']) {
 				if (isset($dom[$key]['parent']) AND isset($dom[$dom[$key]['parent']]['thead']) AND !TCPDF_STATIC::empty_string($dom[$dom[$key]['parent']]['thead'])) {
@@ -17603,7 +17605,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 				$textfill = isset($dom[$key]['fill']) ? $dom[$key]['fill'] : (($this->textrendermode % 2) == 0);
 				$textclip = isset($dom[$key]['clip']) ? $dom[$key]['clip'] : ($this->textrendermode > 3);
 				$this->setTextRenderingMode($textstroke, $textfill, $textclip);
-				
+
 				if (isset($dom[$key]['font-stretch']) AND ($dom[$key]['font-stretch'] !== false)) {
 					$this->setFontStretching($dom[$key]['font-stretch']);
 				}
@@ -17633,7 +17635,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 				if (TCPDF_STATIC::empty_string($lalign)) {
 					$lalign = $align;
 				}
-				
+
 			}
 			// align lines
 			if ($this->newline AND (strlen($dom[$key]['value']) > 0) AND ($dom[$key]['value'] != 'td') AND ($dom[$key]['value'] != 'th')) {
@@ -18046,7 +18048,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 					}
 				}
 				$pbrk = $this->checkPageBreak($this->lasth);
-				
+
 				$this->newline = false;
 				$startlinex = $this->x;
 				$startliney = $this->y;
@@ -18110,7 +18112,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						} else {
 							$wtmp = $this->w - $this->rMargin - $this->x;
 						}
-						
+
 						// get cell spacing
 						if (isset($dom[$key]['attribute']['cellspacing'])) {
 							$clsp = $this->getHTMLUnitToUnits($dom[$key]['attribute']['cellspacing'], 1, 'px');
@@ -18120,14 +18122,14 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						} else {
 							$cellspacing = array('H' => 0, 'V' => 0);
 						}
-						
+
 						// table width
 						if (isset($dom[$key]['width'])) {
 							$table_width = $this->getHTMLUnitToUnits($dom[$key]['width'], $wtmp, 'px');
 						} else {
 							$table_width = $wtmp;
 						}
-						
+
 						$table_width -= (2 * $cellspacing['H']);
 						if (!$this->inthead) {
 							$this->y += $cellspacing['V'];
@@ -18144,13 +18146,13 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						// array of custom column widths
 						$table_colwidths = array_fill(0, $dom[$key]['cols'], $table_min_column_width);
 					}
-					
+
 					// table row
 					if ($dom[$key]['value'] == 'tr') {
 						// reset column counter
 						$colid = 0;
 					}
-					
+
 					// table cell
 					if (($dom[$key]['value'] == 'td') OR ($dom[$key]['value'] == 'th')) {
 						$trid = $dom[$key]['parent'];
@@ -18183,7 +18185,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						} else {
 							$cellh = 0;
 						}
-						
+
 						if (isset($dom[$key]['content'])) {
 							$cell_content = $dom[$key]['content'];
 						} else {
@@ -18972,10 +18974,10 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						$testscrtype = @parse_url($imgsrc);
 						if (empty($testscrtype['query'])) {
 							// convert URL to server path
-							$imgsrc = str_replace(K_PATH_URL, config('Amer.tcpdf.packagePath'), $imgsrc);
+							$imgsrc = str_replace(config('Amer.TCPDF.PATH_URL'), config('Amer.TCPDF.packagePath'), $imgsrc);
 						} elseif (preg_match('|^https?://|', $imgsrc) !== 1) {
 							// convert URL to server path
-							$imgsrc = str_replace(config('Amer.tcpdf.packagePath'), K_PATH_URL, $imgsrc);
+							$imgsrc = str_replace(config('Amer.TCPDF.PATH_URL'), config('Amer.TCPDF.packagePath'), $imgsrc);
 						}
 					}
 					// get image type
@@ -19199,7 +19201,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 				$this->addHTMLVertSpace($hbz, $hb, $cell, $firsttag);
 				break;
 			}
-			
+
 			// Form fields (since 4.8.000 - 2009-09-07)
 			case 'form': {
 				if (isset($tag['attribute']['action'])) {
@@ -19264,7 +19266,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 					}
 				}
 				switch ($tag['attribute']['type']) {
-					
+
 					case 'text': {
 						if (isset($value)) {
 							$opt['v'] = $value;
@@ -19446,7 +19448,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 				break;
 			}
 			case 'tcpdf': {
-				if (defined(config('Amer.tcpdf.CallsInHTML')) AND (config('Amer.tcpdf.CallsInHTML') === true)) {
+				if (defined(config('Amer.TCPDF.CallsInHTML')) AND (config('Amer.TCPDF.CallsInHTML') === true)) {
 					// Special tag used to call TCPDF methods
 					if (isset($tag['attribute']['method'])) {
 						$tcpdf_method = $tag['attribute']['method'];
@@ -24383,10 +24385,10 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						$testscrtype = @parse_url($img);
 						if (empty($testscrtype['query'])) {
 							// convert URL to server path
-							$img = str_replace(K_PATH_URL, config('Amer.tcpdf.packagePath'), $img);
+							$img = str_replace(K_PATH_URL, config('Amer.TCPDF.packagePath'), $img);
 						} elseif (preg_match('|^https?://|', $img) !== 1) {
 							// convert server path to URL
-							$img = str_replace(config('Amer.tcpdf.packagePath'), K_PATH_URL, $img);
+							$img = str_replace(config('Amer.TCPDF.packagePath'), K_PATH_URL, $img);
 						}
 					}
 					// get image type

@@ -81,6 +81,7 @@ if (!defined('K_PATH_URL')) {
 		$k_path_url .= str_replace( '\\', '/', substr(config('Amer.TCPDF.packagePath'), (strlen($_SERVER['DOCUMENT_ROOT']) - 1)));
 	}
 	define ('K_PATH_URL', $k_path_url);
+    dd("S");
 }
 
 if (!defined('K_PATH_IMAGES')) {

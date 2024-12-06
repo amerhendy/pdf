@@ -14,6 +14,7 @@ class AmerPdf extends TCPDF{
     public $waterMarkText=null;
     public $waterMarkTextX=10;
     public $waterMarkTextY=150;
+    public $config;
 	public function Header() {
         $headerData = $this->getHeaderData();
 		$this->setfont($this->customFooterFont[0] ?? 'aealarabiya', $this->customFooterFont[1]??'', $this->customFooterFont[2] ?? 11);
@@ -21,7 +22,6 @@ class AmerPdf extends TCPDF{
         if($this->waterMarkText !== null){
             $this->RotatedText($this->waterMarkTextX,$this->waterMarkTextY,$this->waterMarkText,45);
         }
-        
     }
 	public function Footer(){
 		if(!empty($this->customFooterFont)){
@@ -30,17 +30,17 @@ class AmerPdf extends TCPDF{
 		$text=str_replace('%pageNumber%',$this->PageNo(),$this->customFooterText);
 		//pageNumber
 		$this->Cell(
-			0, 
-			0, 
+			0,
+			0,
 			$this->writeHTML($text),
-			$border=0, 
-			$ln=0, 
-			$align='C', 
-			$fill=false, 
-			$link=0, 
-			$stretch=0, 
-			$ignore_min_height=true, 
-			$calign='T', 
+			$border=0,
+			$ln=0,
+			$align='C',
+			$fill=false,
+			$link=0,
+			$stretch=0,
+			$ignore_min_height=true,
+			$calign='T',
 			$valign='M');
 	}
 	public function setFooterHtml($font=array(),$hs, $tc=array(0,0,0), $lc=array(0,0,0),$line=true)
@@ -72,7 +72,7 @@ class AmerPdf extends TCPDF{
         $this->SetTextColor(255);
         $this->SetDrawColor(128, 0, 0);
         $this->SetLineWidth(0.3);
-        $this->SetFont('', 'B');        
+        $this->SetFont('', 'B');
         $num_headers = count($header);
         for($i = 0; $i < $num_headers; ++$i) {
             $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
@@ -109,7 +109,7 @@ class AmerPdf extends TCPDF{
             {
                 //Undo adding the row.
                 $this->rollbackTransaction(true);
-                //Adds a bottom line onto the current page. 
+                //Adds a bottom line onto the current page.
                 //Note: May cause page break itself.
                 $this->Cell(array_sum($w), 0, '', 'T');
                 //Add a new page.
@@ -170,5 +170,5 @@ class AmerPdf extends TCPDF{
 			$this->_out('Q');
 		}
 		parent::_endpage();
-	}   
+	}
 }
