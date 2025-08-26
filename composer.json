@@ -3,7 +3,7 @@
     "description": "it is use tcpdf package",
     "type": "library",
     "license": "free",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "autoload": {
         "psr-4": {
             "Amerhendy\\Pdf\\": "src/"
