@@ -1,0 +1,33 @@
+{
+    "name": "amerhendy/pdf",
+    "description": "it is use tcpdf package",
+    "type": "library",
+    "license": "free",
+    "version": "0.0.1",
+    "autoload": {
+        "psr-4": {
+            "Amerhendy\\Pdf\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "amerhendy",
+            "email": "amer.hendy@yahoo.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1"
+    },
+    "prefer-stable": true,
+    "config": {
+      "sort-packages": true,
+      "preferred-install": "dist",
+      "optimize-autoloader": true
+    },
+    "extra": {
+      "laravel": {
+          "providers": ["Amerhendy\\Pdf\\PdfServiceProvider"]
+      }
+    }
+
+}
